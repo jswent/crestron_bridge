@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+      target: prod
+    image: crestron_bridge:${CRESTRON_BRIDGE_VERSION:-latest}
+    restart: always
+    env_file:
+    - .env
+    environment:
+      CRESTRON_BRIDGE_HOST: 0.0.0.0
