@@ -29,7 +29,8 @@ class TelnetManager:
 
         if wait_for:
             response = self.connection.read_until(
-                wait_for.encode("ascii"), self.timeout
+                wait_for.encode("ascii"),
+                self.timeout,
             ).decode("ascii")
         else:
             time.sleep(1)
