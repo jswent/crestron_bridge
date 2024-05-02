@@ -37,13 +37,13 @@ async def get_media_room_light_status() -> LightGetResponse:
   response = tm.send_command(f"{ROOM} LTS STATUS")
   print(response)
 
-  if f"{ROOM} LTS S1 OK" in response:
+  if f"{ROOM} LTS STATUS S1 OK" in response:
     return LightGetResponse(status="SCENE 1", is_active="true")
-  elif f"{ROOM} LTS S2 OK" in response:
+  elif f"{ROOM} LTS STATUS S2 OK" in response:
     return LightGetResponse(status="SCENE 2", is_active="true")
-  elif f"{ROOM} LTS S3 OK" in response:
+  elif f"{ROOM} LTS STATUS S3 OK" in response:
     return LightGetResponse(status="SCENE 3", is_active="true")
-  elif f"{ROOM} LTS OFF OK" in response:
+  elif f"{ROOM} LTS STATUS OFF OK" in response:
     return LightGetResponse(status="OFF", is_active="false")
   else:
     return LightGetResponse(status="ERROR", is_active="false")
