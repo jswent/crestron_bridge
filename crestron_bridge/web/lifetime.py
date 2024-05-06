@@ -2,7 +2,9 @@ from typing import Awaitable, Callable
 
 from fastapi import FastAPI
 
-from crestron_bridge.services.telnet.lifetime import shutdown_event, startup_event
+import crestron_bridge.services.telnet.lifetime as telnet
+import crestron_bridge.services.state.lifetime as state
+import crestron_bridge.services.commander.lifetime as commander
 
 
 def register_startup_event(
@@ -20,7 +22,8 @@ def register_startup_event(
 
     @app.on_event("startup")
     async def _startup() -> None:  # noqa: WPS430
-        await startup_event()
+        await telnet.startup_event()
+        await commander.startup_event()
         app.middleware_stack = None
         app.middleware_stack = app.build_middleware_stack()
         pass  # noqa: WPS420
@@ -40,7 +43,8 @@ def register_shutdown_event(
 
     @app.on_event("shutdown")
     async def _shutdown() -> None:  # noqa: WPS430
-        await shutdown_event()
+        await commander.shutdown_event()
+        await telnet.shutdown_event()
         pass  # noqa: WPS420
 
     return _shutdown
