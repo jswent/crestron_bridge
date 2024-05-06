@@ -5,8 +5,17 @@ class LightPost(BaseModel):
 
 class LightPostResponse(BaseModel):
   status: str
+  level: int
   response: str
 
 class LightGetResponse(BaseModel):
   status: str
+  level: int
   is_active: str
+
+class LightSetLevelPost(BaseModel):
+  level: int
+
+class LightSetLevelPostResponse(BaseModel):
+  level: int
+  response: str

@@ -5,9 +5,12 @@ from crestron_bridge.web.api.lights.dependencies import Room
 
 router = APIRouter()
 
-router.include_router(media_room.router, prefix="/media-room", tags=["media-room"])
-router.include_router(foyer.router, prefix="/foyer", tags=["foyer"])
-router.include_router(kitchen.router, prefix="/kitchen", tags=["kitchen"])
+# router.include_router(media_room.router, prefix="/media-room", tags=["media-room"])
+# router.include_router(foyer.router, prefix="/foyer", tags=["foyer"])
+# router.include_router(kitchen.router, prefix="/kitchen", tags=["kitchen"])
+router.include_router(Room("MEDIA ROOM").router, prefix="/media-room", tags=["media-room"])
+router.include_router(Room("FOYER").router, prefix="/foyer", tags=["foyer"])
+router.include_router(Room("KITCHEN").router, prefix="/kitchen", tags=["kitchen"])
 router.include_router(Room("JAKE OFFICE").router, prefix="/jake-office", tags=["jake-office"])
 router.include_router(Room("JWS OFFICE").router, prefix="/jws-office", tags=["jws-office"])  
 router.include_router(Room("LIVING").router, prefix="/living-room", tags=["living-room"]) 
