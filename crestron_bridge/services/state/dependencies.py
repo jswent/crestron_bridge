@@ -33,7 +33,7 @@ class ServerState:
     else:
       if status:
         self.lights_state[room].status = status
-      if level:
+      if level is not None:
         self.lights_state[room].level = level
       if is_active:
         self.lights_state[room].is_active = is_active
