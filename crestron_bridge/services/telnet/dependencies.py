@@ -153,7 +153,7 @@ class TelnetManager:
         lights_pattern = r"^DISPATCH ([\w\s]+) LTS (S[1-3]|OFF) OK$"
         media_room_power_pattern = r"^DISPATCH MEDIA ROOM (ON|OFF) OK$"
         media_room_source_pattern = r"DISPATCH MEDIA ROOM SRC (APPLETV|CABLE) OK$"
-        audio_pattern = r"^DISPATCH ([\w\s]+) AUDIO (SONOS|XM|FM|OFF) OK$"
+        audio_pattern = r"^DISPATCH ([\w\s]+) AUDIO SRC (SONOS|XM|FM|OFF) OK$"
 
         # Check for lights dispatch
         match = re.match(lights_pattern, response)
