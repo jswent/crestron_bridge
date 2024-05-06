@@ -16,5 +16,5 @@ router.include_router(Room("JWS OFFICE").router, prefix="/jws-office", tags=["jw
 router.include_router(Room("LIVING").router, prefix="/living-room", tags=["living-room"]) 
 router.include_router(Room("STAFF RM").router, prefix="/staff-room", tags=["staff-room"])
 router.include_router(Room("MBED").router, prefix="/master-bedroom", tags=["master-bedroom"])
-router.include_router(Room("GAME ROOM").router, prefix="/game-room", tags=["game-room"])
+# router.include_router(Room("GAME ROOM").router, prefix="/game-room", tags=["game-room"])
 router.include_router(Room("DINING").router, prefix="/dining-room", tags=["dining-room"])
