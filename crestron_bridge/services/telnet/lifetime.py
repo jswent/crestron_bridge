@@ -8,7 +8,7 @@ telnet_manager = TelnetManager(HOST, PORT, TIMEOUT)
 
 
 async def startup_event():
-    telnet_manager.connect()
+    telnet_manager.start()
 
 
 async def shutdown_event():
