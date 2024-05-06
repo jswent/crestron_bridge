@@ -2,26 +2,17 @@ from fastapi import APIRouter
 
 from crestron_bridge.web.api.audio.schema import AudioGetResponse, AudioPost, AudioPostResponse
 from crestron_bridge.services.telnet.lifetime import get_telnet_manager
+from crestron_bridge.services.state.lifetime import get_server_state
 
 router = APIRouter()
 tm = get_telnet_manager()
+state = get_server_state()
 
 @router.get("/", response_model=AudioGetResponse)
 async def get_deck_audio_status() -> AudioGetResponse:
-  response = tm.send_command("DECK AUDIO SRC STATUS")
-  print(response)
-
-  response_text = response.upper()
-  if "DECK AUDIO SRC STATUS SONOS OK" in response_text:
-    return AudioGetResponse(source="SONOS", state="ON")
-  elif "DECK AUDIO SRC STATUS XM OK" in response_text:
-    return AudioGetResponse(source="XM", state="ON")
-  elif "DECK AUDIO SRC STATUS FM OK" in response_text:
-    return AudioGetResponse(source="FM", state="ON")
-  elif "DECK AUDIO SRC STATUS OFF OK" in response_text:
-    return AudioGetResponse(source="OFF", state="OFF")
-  else:
-    return AudioGetResponse(source="ERROR", state="ERROR")
+  print(f"Getting deck audio status from state")
+  audio_state = state.get_audio_state("DECK")
+  return AudioGetResponse(source=audio_state.source, state=audio_state.state)
 
 @router.post("/turn-on", response_model=AudioPostResponse)
 async def turn_on_deck_audio():
