@@ -60,6 +60,8 @@ class Room:
         @self.router.post("/set-level", response_model=LightPostResponse)
         async def set_level(body: LightSetLevelPost):
             level = body.level;
+            if level > 100:
+                level = (int)(level / 2.55)
             status = "OFF" if level == 0 else "S1" if level > 66 else "S2" if level > 33 else "S3"
 
             command = f"{self.name} LTS {status}"
