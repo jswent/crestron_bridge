@@ -42,12 +42,14 @@ class GunicornApplication(BaseApplication):
         host: str,
         port: int,
         workers: int,
+        timeout: int,
         **kwargs: Any,
     ):
         self.options = {
             "bind": f"{host}:{port}",
             "workers": workers,
             "worker_class": "crestron_bridge.gunicorn_runner.UvicornWorker",
+            "timeout": timeout,
             **kwargs,
         }
         self.app = app
