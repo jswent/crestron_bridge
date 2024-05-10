@@ -5,15 +5,19 @@ from crestron_bridge.services.telnet.lifetime import get_telnet_manager
 from crestron_bridge.services.state.lifetime import get_server_state
 
 class Room:
-    router = APIRouter()
-
     def __init__(self, name: str):
         self.name = name.upper()
         self.router = APIRouter()
         self.tm = get_telnet_manager()
         self.state = get_server_state()
 
-    @router.post("/", response_model=LightPostResponse)
+        self.router.add_api_route("/", self.update_light_status, methods=["POST"], response_model=LightPostResponse)
+        self.router.add_api_route("/", self.get_light_status, methods=["GET"], response_model=LightGetResponse)
+        self.router.add_api_route("/turn-on", self.turn_on, methods=["POST"], response_model=LightPostResponse)
+        self.router.add_api_route("/turn-off", self.turn_off, methods=["POST"], response_model=LightPostResponse)
+        self.router.add_api_route("/set-level", self.set_level, methods=["POST"], response_model=LightPostResponse)
+
+    # @router.post("/", response_model=LightPostResponse)
     async def update_light_status(self, body: LightPost):
         status = body.status.upper()
         if status == "ON":
@@ -34,13 +38,13 @@ class Room:
             return LightPostResponse(status=status, level=level, response="OK")
         return LightPostResponse(status="ERROR", level=-1, response="ERROR")
 
-    @router.get("/", response_model=LightGetResponse)
+    # @router.get("/", response_model=LightGetResponse)
     async def get_light_status(self) -> LightGetResponse:
         print(f"Getting light status of {self.name} from state")
         light_state = self.state.get_light_state(self.name)
         return LightGetResponse(status=light_state.status, level=light_state.level, is_active=light_state.is_active)
 
-    @router.post("/turn-on", response_model=LightPostResponse)
+    # @router.post("/turn-on", response_model=LightPostResponse)
     async def turn_on(self):
         response = self.tm.send_command(f"{self.name} LTS S1")
         print(response)
@@ -50,7 +54,7 @@ class Room:
             return LightPostResponse(status="S1", level=100, response="OK")
         return LightPostResponse(status="ERROR", level=-1, response="ERROR")
 
-    @router.post("/turn-off", response_model=LightPostResponse)
+    # @router.post("/turn-off", response_model=LightPostResponse)
     async def turn_off(self):
         response = self.tm.send_command(f"{self.name} LTS OFF")
         print(response)
@@ -60,7 +64,7 @@ class Room:
             return LightPostResponse(status="OFF", level=0, response="OK")
         return LightPostResponse(status="ERROR", level=-1, response="ERROR")
 
-    @router.post("/set-level", response_model=LightPostResponse)
+    # @router.post("/set-level", response_model=LightPostResponse)
     async def set_level(self, body: LightSetLevelPost):
         level = body.level;
         status = "OFF" if level == 0 else "S1" if level > 66 else "S2" if level > 33 else "S3"
