@@ -17,7 +17,8 @@ schema = {
     "staff_room": "STAFF RM",
   },
   "audio": {
-    "deck": "DECK"
+    "deck": "DECK",
+    "kitchen": "KITCHEN"
   },
   "media_room": "MEDIA ROOM",
 }
