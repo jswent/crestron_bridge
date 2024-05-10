@@ -1,15 +1,20 @@
 schema = {
   "lights": {
-    "kitchen": "KITCHEN",
-    "media_room": "MEDIA ROOM",
+    # First Floor
+    "dining_room": "DINING",
     "foyer": "FOYER",
-    "jake_office": "JAKE OFFICE",
-    "jws_office": "JWS OFFICE",
+    "kitchen": "KITCHEN",
     "living_room": "LIVING",
-    "staff_room": "STAFF RM",
+    "media_room": "MEDIA ROOM",
+    # Second Floor
+    "game_room": "GAME ROOM",
+    "jake_bathroom": "JAKE BATHROOM",
+    "jake_bedroom": "JAKE BED",
+    "jake_office": "JAKE OFFICE",
     "master_bedroom": "MBED",
-    # "game_room": "GAME ROOM",
-    "dining_room": "DINING"
+    # Third Floor
+    "jws_office": "JWS OFFICE",
+    "staff_room": "STAFF RM",
   },
   "audio": {
     "deck": "DECK"
