@@ -48,7 +48,7 @@ class Commander:
     return f"{schema['lights'][room]} LTS STATUS"
 
   def _construct_media_room_power_status_command(self) -> str:
-    return f"{schema['media_room']} STATUS"
+    return f"{schema['media_room']} POWER STATUS"
 
   def _construct_media_room_source_status_command(self) -> str:
     return f"{schema['media_room']} SRC STATUS"
@@ -87,7 +87,7 @@ class Commander:
   def _update_media_room_state(self, responses: list[str]):
     response = "\n".join(responses)
 
-    media_room_power_pattern = r"^MEDIA ROOM STATUS (ON|OFF)$" # TODO: Update when OK is added
+    media_room_power_pattern = r"^MEDIA ROOM POWER STATUS (ON|OFF)$" # TODO: Update when OK is added
     media_room_source_pattern = r"^MEDIA ROOM SRC STATUS (APPLETV|CABLE) OK$"
 
     power_match = re.search(media_room_power_pattern, response, re.MULTILINE)

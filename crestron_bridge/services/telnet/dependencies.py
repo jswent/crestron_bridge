@@ -26,7 +26,7 @@ class TelnetManager:
         time.sleep(1)
         ack = self.connection.read_very_eager().decode("ascii")
 
-        success = "HELLO, I AM CONNECTED" in ack 
+        success = "HELLO, I AM CONNECTED" in ack
 
         # TODO: Add logging
         print("Connected to Crestron processor") if success else print("Failed to connect to Crestron processor")
@@ -99,7 +99,7 @@ class TelnetManager:
                 while not self.requests.empty():
                     commands.append(self.requests.get())
                 batch_command = "\r\n".join(commands)
-                try: 
+                try:
                     self.connection.write(batch_command.encode("ascii"))
                 except (BrokenPipeError, EOFError) as e:
                     logging.error("Connection lost. Attempting to reconnect.")
@@ -121,7 +121,7 @@ class TelnetManager:
             time.sleep(0.3)
 
     def _process_responses(self):
-        running = False 
+        running = False
         while True:
             if self.connection:
                 if not running:
@@ -151,7 +151,7 @@ class TelnetManager:
     def _handle_dispatch(self, response: str):
         # regex patterns for different dispatch types
         lights_pattern = r"^DISPATCH ([\w\s]+) LTS (S[1-3]|OFF) OK$"
-        media_room_power_pattern = r"^DISPATCH MEDIA ROOM (ON|OFF) OK$"
+        media_room_power_pattern = r"^DISPATCH MEDIA ROOM POWER (ON|OFF) OK$"
         media_room_source_pattern = r"DISPATCH MEDIA ROOM SRC (APPLETV|CABLE) OK$"
         audio_pattern = r"^DISPATCH ([\w\s]+) AUDIO SRC (SONOS|XM|FM|OFF) OK$"
 

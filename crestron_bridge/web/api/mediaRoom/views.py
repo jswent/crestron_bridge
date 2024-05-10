@@ -13,13 +13,13 @@ async def update_media_room_status(
     media_room_status: MediaRoomPost,
 ):
   status = media_room_status.status.upper()
-  response = tm.send_command(f"MEDIA ROOM {status}")
+  response = tm.send_command(f"MEDIA ROOM POWER {status}")
   print(response)
 
   response_text = response.upper()
   switch_response = {
-    "MEDIA ROOM ON": MediaRoomPostResponse(status="POWERING UP", response="OK"),
-    "MEDIA ROOM OFF": MediaRoomPostResponse(status="POWERING DOWN", response="OK")
+    "MEDIA ROOM POWER ON": MediaRoomPostResponse(status="POWERING UP", response="OK"),
+    "MEDIA ROOM POWER OFF": MediaRoomPostResponse(status="POWERING DOWN", response="OK")
   }
   for key in switch_response:
     if key in response_text:
@@ -34,22 +34,22 @@ async def get_media_room_status() -> MediaRoomGetResponse:
 
 @router.post("/turn-on", response_model=MediaRoomPostResponse)
 async def turn_on():
-  response = tm.send_command("MEDIA ROOM ON")
+  response = tm.send_command("MEDIA ROOM POWER ON")
   print(response)
 
   response_text = response.upper()
-  if "MEDIA ROOM ON OK" in response_text:
+  if "MEDIA ROOM POWER ON OK" in response_text:
     state.update_media_room_state(status="ON", is_active="true")
     return MediaRoomPostResponse(status="POWERING UP", response="OK")
   return MediaRoomPostResponse(status="ERROR", response="ERROR")
 
 @router.post("/turn-off", response_model=MediaRoomPostResponse)
 async def turn_off():
-  response = tm.send_command("MEDIA ROOM OFF")
+  response = tm.send_command("MEDIA ROOM POWER OFF")
   print(response)
 
   response_text = response.upper()
-  if "MEDIA ROOM OFF OK" in response_text:
+  if "MEDIA ROOM POWER OFF OK" in response_text:
     state.update_media_room_state(status="OFF", is_active="false")
     return MediaRoomPostResponse(status="POWERING DOWN", response="OK")
   return MediaRoomPostResponse(status="ERROR", response="ERROR")
