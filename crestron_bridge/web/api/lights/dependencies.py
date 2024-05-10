@@ -1,3 +1,4 @@
+from typing import Callable
 from fastapi import APIRouter, Depends
 from crestron_bridge.web.api.lights.schema import LightPost, LightPostResponse, LightGetResponse, LightSetLevelPost
 from crestron_bridge.services.telnet.lifetime import get_telnet_manager
@@ -75,3 +76,62 @@ class Room:
                 return LightPostResponse(status=status, level=scene_level, response="OK")
             return LightPostResponse(status="ERROR", level=-1, response="ERROR")
 
+
+class CustomRoomConfig:
+    def __init__(
+        self, 
+        name: str, 
+        update_light_status: Callable[[object, LightPost], LightPostResponse] = None,
+        get_light_status: Callable[[object], LightGetResponse] = None,
+        turn_on: Callable[[object], LightPostResponse] = None,
+        turn_off: Callable[[object], LightPostResponse] = None,
+        set_level: Callable[[object, LightSetLevelPost], LightPostResponse] = None
+    ):
+        self.name = name.upper()
+        self.update_light_status = update_light_status
+        self.get_light_status = get_light_status
+        self.turn_on = turn_on
+        self.turn_off = turn_off
+        self.set_level = set_level
+
+class CustomRoom(Room):
+    def __init__(self, config: CustomRoomConfig):
+        super().__init__(config.name)
+        self.config = config
+
+        # Override the router endpoints
+        self.router.routes = [
+            route for route in self.router.routes
+            if route.path not in ["/", "/turn-on", "/turn-off", "/set-level"]
+        ]
+
+        self.router.add_api_route("/", self.update_light_status, methods=["POST"], response_model=LightPostResponse)
+        self.router.add_api_route("/", self.get_light_status, methods=["GET"], response_model=LightGetResponse)
+        self.router.add_api_route("/turn-on", self.turn_on, methods=["POST"], response_model=LightPostResponse)
+        self.router.add_api_route("/turn-off", self.turn_off, methods=["POST"], response_model=LightPostResponse)
+        self.router.add_api_route("/set-level", self.set_level, methods=["POST"], response_model=LightPostResponse)
+
+    async def update_light_status(self, body: LightPost):
+        if self.config.update_light_status:
+            return await self.config.update_light_status(self, body)
+        return await super().update_light_status(body)
+
+    async def get_light_status(self):
+        if self.config.get_light_status:
+            return await self.config.get_light_status(self)
+        return await super().get_light_status()
+
+    async def turn_on(self):
+        if self.config.turn_on:
+            return await self.config.turn_on(self)
+        return await super().turn_on()
+
+    async def turn_off(self):
+        if self.config.turn_off:
+            return await self.config.turn_off(self)
+        return await super().turn_off()
+
+    async def set_level(self, body: LightSetLevelPost):
+        if self.config.set_level:
+            return await self.config.set_level(self, body)
+        return await super().set_level(body)
