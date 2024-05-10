@@ -23,7 +23,7 @@ class ServerState:
     self.audio_state: dict[str, AudioState] = {}
 
 
-  def update_light_state(self, room: str, status: str | None, level: int | None, is_active: str | None):
+  def update_light_state(self, room: str, status: str | None = None, level: int | None = None, is_active: str | None = None):
     if room not in self.lights_state:
       if status and level is not None and is_active is not None:
         print(f"Initializing new light state for {room}: ({status}, {level}, {is_active})")
@@ -41,7 +41,7 @@ class ServerState:
   def get_light_state(self, room: str) -> LightState:
     return self.lights_state[room]
   
-  def update_media_room_state(self, status: str | None, source: str | None, is_active: str | None):
+  def update_media_room_state(self, status: str | None = None, source: str | None = None, is_active: str | None = None):
     if self.media_room_state is None:
       if status and source and is_active:
         print(f"Initializing new media room state: ({status}, {source}, {is_active})")
@@ -59,7 +59,7 @@ class ServerState:
   def get_media_room_state(self) -> MediaRoomState:
     return self.media_room_state
   
-  def update_audio_state(self, location: str, source: str | None, state: str | None):
+  def update_audio_state(self, location: str, source: str | None = None, state: str | None = None):
     if location not in self.audio_state:
       if source and state:
         print(f"Initializing new audio state for {location}")
