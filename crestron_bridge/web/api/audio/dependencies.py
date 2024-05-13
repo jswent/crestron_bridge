@@ -26,6 +26,7 @@ class AudioLocation:
         response = self.tm.send_command(f"{self.location} AUDIO SRC SONOS")
         print(response)
         if f"{self.location} AUDIO SRC SONOS OK" in response.upper():
+            self.state.update_audio_state(self.location, "SONOS", "ON")
             return AudioPostResponse(source="SONOS", state="ON", response="OK")
         return AudioPostResponse(source="ERROR", state="ERROR", response="ERROR")
     
@@ -33,6 +34,7 @@ class AudioLocation:
         response = self.tm.send_command(f"{self.location} AUDIO SRC OFF")
         print(response)
         if f"{self.location} AUDIO SRC OFF OK" in response.upper():
+            self.state.update_audio_state(self.location, "OFF", "OFF")
             return AudioPostResponse(source="OFF", state="OFF", response="OK")
         return AudioPostResponse(source="ERROR", state="ERROR", response="ERROR")
     
@@ -43,6 +45,7 @@ class AudioLocation:
         response = self.tm.send_command(f"{self.location} AUDIO SRC {source}")
         print(response)
         if f"{self.location} AUDIO SRC {source} OK" in response.upper():
+            self.state.update_audio_state(self.location, source, "ON")
             return AudioPostResponse(source=source, state="ON", response="OK")
         return AudioPostResponse(source="ERROR", state="ERROR", response="ERROR")
 
