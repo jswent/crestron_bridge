@@ -18,7 +18,10 @@ schema = {
   },
   "audio": {
     "deck": "DECK",
-    "kitchen": "KITCHEN"
+    "kitchen": "KITCHEN",
+    "dining-room": "DINING ROOM",
+    "game-room": "GAME ROOM",
+    "jake-office": "JAKE OFFICE",
   },
   "media_room": "MEDIA ROOM",
 }
