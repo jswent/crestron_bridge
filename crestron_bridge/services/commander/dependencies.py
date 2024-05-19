@@ -66,8 +66,8 @@ class Commander:
     for response in responses:
       match = re.search(audio_pattern, response)
       if match:
-        location = match.group(1)
-        source = match.group(2)
+        location = match.group(1).rstrip()
+        source = match.group(2).rstrip()
         state = "ON" if source != "OFF" else "OFF"
         # print(f"Updating audio state for {location} to {source}, {state}")
         self.state.update_audio_state(location=location, source=source, state=state)
@@ -77,8 +77,8 @@ class Commander:
     for response in responses:
       match = re.search(lights_pattern, response)
       if match:
-        room = match.group(1)
-        status = match.group(2)
+        room = match.group(1).rstrip()
+        status = match.group(2).rstrip()
         level = 100 if status == "S1" else 66 if status == "S2" else 33 if status == "S3" else 0
         is_active = "true" if status != "OFF" else "false"
         # print(f"Updating light for {room} to {status}, {level}, {is_active}")
@@ -94,8 +94,8 @@ class Commander:
     source_match = re.search(media_room_source_pattern, response, re.MULTILINE)
 
     if power_match and source_match:
-      status = power_match.group(1)
-      source = source_match.group(1)
+      status = power_match.group(1).rstrip()
+      source = source_match.group(1).rstrip()
       is_active = "true" if status == "ON" else "false"
       self.state.update_media_room_state(status=status, source=source, is_active=is_active)
     elif power_match:

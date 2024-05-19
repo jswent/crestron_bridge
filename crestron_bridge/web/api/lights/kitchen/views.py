@@ -38,12 +38,12 @@ async def get_media_room_light_status() -> LightGetResponse:
   print(response)
 
   if f"{ROOM} LTS STATUS S1 OK" in response:
-    return LightGetResponse(status="SCENE 1", is_active="true")
+    return LightGetResponse(status="SCENE 1", level=100, is_active="true")
   elif f"{ROOM} LTS STATUS S2 OK" in response:
-    return LightGetResponse(status="SCENE 2", is_active="true")
+    return LightGetResponse(status="SCENE 2", level=66, is_active="true")
   elif f"{ROOM} LTS STATUS S3 OK" in response:
-    return LightGetResponse(status="SCENE 3", is_active="true")
+    return LightGetResponse(status="SCENE 3", level=33, is_active="true")
   elif f"{ROOM} LTS STATUS OFF OK" in response:
-    return LightGetResponse(status="OFF", is_active="false")
+    return LightGetResponse(status="OFF", level=0, is_active="false")
   else:
-    return LightGetResponse(status="ERROR", is_active="false")
+    return LightGetResponse(status="ERROR", level=0, is_active="false")

@@ -17,6 +17,10 @@ class Room:
         self.router.add_api_route("/turn-off", self.turn_off, methods=["POST"], response_model=LightPostResponse)
         self.router.add_api_route("/set-level", self.set_level, methods=["POST"], response_model=LightPostResponse)
 
+    def create_sub_light(self, sub_light_name: str, sub_light_endpoint: str):
+        sub_light = Room(sub_light_name)
+        self.router.include_router(sub_light.router, prefix=f"/{sub_light_endpoint}")
+
     # @router.post("/", response_model=LightPostResponse)
     async def update_light_status(self, body: LightPost):
         status = body.status.upper()

@@ -187,7 +187,7 @@ class TelnetManager:
         if match:
             location = match.group(1)
             source = match.group(2)
-            state = 1 if source != "OFF" else 0
+            state = "ON" if source != "OFF" else "OFF"
             print(f"Updating audio state for {location} to {source}, {state}")
             self.server_state.update_audio_state(location=location, source=source, state=state)
             return
