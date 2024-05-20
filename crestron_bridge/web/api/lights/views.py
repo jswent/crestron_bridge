@@ -1,29 +1,22 @@
 from fastapi import APIRouter
 
-from crestron_bridge.web.api.lights import media_room, foyer, kitchen
-from crestron_bridge.web.api.lights.dependencies import Room, CustomRoom
-from crestron_bridge.web.api.lights.custom_rooms import CustomRooms
+from crestron_bridge.web.api.lights.dependencies import Room 
+from crestron_bridge.web.api.lights.config import room_configs
 
 router = APIRouter()
 
-# router.include_router(media_room.router, prefix="/media-room", tags=["media-room"])
-# router.include_router(foyer.router, prefix="/foyer", tags=["foyer"])
-# router.include_router(kitchen.router, prefix="/kitchen", tags=["kitchen"])
-Kitchen = Room("KITCHEN")
-Kitchen.create_sub_light("KITCHEN ISLAND", "island")
-router.include_router(Kitchen.router, prefix="/kitchen", tags=["kitchen"])
-router.include_router(Room("MEDIA ROOM").router, prefix="/media-room", tags=["media-room"])
-router.include_router(Room("FOYER").router, prefix="/foyer", tags=["foyer"])
-router.include_router(Room("LIVING").router, prefix="/living-room", tags=["living-room"]) 
-router.include_router(Room("DINING").router, prefix="/dining-room", tags=["dining-room"])
+# Create routes dynamically based on room configurations
+for floor, rooms in room_configs.items():
+    for room_config in rooms:
+        if "room" in room_config:
+            room = room_config["room"]
+        else:
+            room = Room(room_config["name"])
 
-JakeOffice = Room("JAKE OFFICE")
-JakeOffice.create_sub_light("JAKE OFFICE DESK", "desk")
-router.include_router(JakeOffice.router, prefix="/jake-office", tags=["jake-office"])
-router.include_router(Room("JAKE BED").router, prefix="/jake-bedroom", tags=["jake-bedroom"])
-router.include_router(Room("MBED").router, prefix="/master-bedroom", tags=["master-bedroom"])
-router.include_router(Room("GAME ROOM").router, prefix="/game-room", tags=["game-room"])
-router.include_router(CustomRoom(CustomRooms.jake_bath()).router, prefix="/jake-bathroom", tags=["jake-bathroom"])
+        if "sub_lights" in room_config:
+            for sub_light in room_config["sub_lights"]:
+                room.create_sub_light(sub_light["room"], sub_light["prefix"])
 
-router.include_router(Room("JWS OFFICE").router, prefix="/jws-office", tags=["jws-office"])  
-router.include_router(Room("STAFF RM").router, prefix="/staff-room", tags=["staff-room"])
+        router.include_router(
+            room.router, prefix=room_config["prefix"], tags=room_config["tags"]
+        )
