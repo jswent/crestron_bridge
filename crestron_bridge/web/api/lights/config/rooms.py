@@ -27,7 +27,12 @@ room_configs = {
             "tags": ["jake-office"],
             "sub_lights": [{"room": Room("JAKE OFFICE DESK"), "prefix": "desk"}],
         },
-        {"name": "JAKE BED", "prefix": "/jake-bedroom", "tags": ["jake-bedroom"]},
+        {
+            "name": "JAKE BED",
+            "prefix": "/jake-bedroom",
+            "tags": ["jake-bedroom"],
+            "sub_lights": [{"room": Room("JAKE BED READING"), "prefix": "reading"}],
+        },
         {"name": "MBED", "prefix": "/master-bedroom", "tags": ["master-bedroom"]},
         {"name": "GAME ROOM", "prefix": "/game-room", "tags": ["game-room"]},
         {
