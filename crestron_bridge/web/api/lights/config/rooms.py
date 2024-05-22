@@ -10,7 +10,7 @@ room_configs = {
             "tags": ["kitchen"],
             "sub_lights": [
                 {
-                    "room": CustomRoom(CustomRooms.on_off("KITCHEN ISLAND")),
+                    "room": Room("KITCHEN ISLAND"),
                     "prefix": "island",
                 }
             ],
